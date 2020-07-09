@@ -80,7 +80,7 @@ function processMIME(method, input) {
   }
 }
 
-window.addEventListener("load", load);
+load();
 
 form.addEventListener("submit", event => {
   event.preventDefault();
