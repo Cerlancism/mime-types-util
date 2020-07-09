@@ -25,57 +25,44 @@ const outputElem = form.querySelector("div > input[name='output']");
 /** @type {HTMLInputElement} */
 const copyButton = form.querySelector("div > div > button[name='copy']");
 
-function getSelection()
-{
+function getSelection() {
   const methodOptions = methodInputElem.options;
   const methodSelectedIndex = methodInputElem.selectedIndex;
 
   return /** @type {MimeMethod} */ (methodOptions[methodSelectedIndex].value);
 }
 
-function getInput()
-{
+function getInput() {
   return stringInputElem.value;
 }
 
-function load()
-{
-  if (query.has("method"))
-  {
+function load() {
+  if (query.has("method")) {
     methodInputElem.value = query.get("method");
-  }
-  else
-  {
-    methodInputElem.value = "lookup"
+  } else {
+    methodInputElem.value = "lookup";
   }
 
-  if (query.has("input"))
-  {
+  if (query.has("input")) {
     stringInputElem.value = query.get("input");
-  }
-  else
-  {
-    stringInputElem.value = ".js"
+  } else {
+    stringInputElem.value = ".js";
   }
   process();
 }
 
-function process()
-{
+function process() {
   console.log("processing");
   const methodInputValue = getSelection();
   const stringInputValue = getInput();
 
   console.log({ methodInputValue, stringInputValue });
 
-  try
-  {
-    outputElem.value = processMIME(methodInputValue, stringInputValue) || "Error";
-  }
-  catch (error)
-  {
-    if (error instanceof Error)
-    {
+  try {
+    outputElem.value =
+      processMIME(methodInputValue, stringInputValue) || "Error";
+  } catch (error) {
+    if (error instanceof Error) {
       console.error(error);
       outputElem.value = error.message;
     }
@@ -91,10 +78,8 @@ function process()
  * @param {MimeMethod} method
  * @param {string} input
  */
-function processMIME(method, input)
-{
-  switch (method)
-  {
+function processMIME(method, input) {
+  switch (method) {
     case "lookup":
     case "contentType":
     case "extension":
@@ -106,8 +91,7 @@ function processMIME(method, input)
 
 load();
 
-form.addEventListener("submit", event =>
-{
+form.addEventListener("submit", event => {
   event.preventDefault();
 
   process();
@@ -115,14 +99,12 @@ form.addEventListener("submit", event =>
   window.history.pushState(state, null, "?" + query.toString());
 });
 
-copyButton.addEventListener("click", event =>
-{
-  console.log("copied")
+copyButton.addEventListener("click", event => {
+  console.log("copied");
   navigator.clipboard.writeText(outputElem.value);
 });
 
-window.addEventListener("popstate", event =>
-{
+window.addEventListener("popstate", event => {
   query = new URLSearchParams(window.location.search);
   console.log("Pop state", query.toString());
   load();
