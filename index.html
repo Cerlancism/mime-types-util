@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+    <title>MIME Types Util</title>
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+
+  <body>
+    <div id="app">
+      <h1>MIME Types Util</h1>
+
+      <form>
+        <div>
+          <label for="mime-method">Method:</label>
+          <select id="mime-method" name="mime-method">
+            <option value="LookUp">Look Up</option>
+            <option value="ContentType">Content Type</option>
+            <option value="Extension">Extension</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="input-string">Input:</label>
+          <input
+            id="input-string"
+            type="text"
+            name="input-string"
+            style="font-family: monospace"
+            value=".js"
+            required
+          />
+        </div>
+
+        <div>
+          <label for="mime-output">Output:</label>
+          <input
+            id="mime-output"
+            name="mime-output"
+            readonly
+            style="font-family: monospace"
+          />
+        </div>
+
+        <div>
+          <div>
+            <button type="submit" id="mime-submit">Submit</button>
+          </div>
+          <div>
+            <button id="output-copy">Copy</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <script src="src/index.js"></script>
+  </body>
+</html>

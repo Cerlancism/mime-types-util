@@ -1,0 +1,25 @@
+body {
+  font-family: sans-serif;
+}
+
+form {
+  display: table;
+}
+
+form > div {
+  display: table-row;
+  margin-bottom: 10px;
+}
+
+form > div > * {
+  display: table-cell;
+  margin-bottom: 10px;
+}
+
+label {
+  padding-right: 10px;
+}
+
+input {
+  width: 80vw;
+}
