@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 
     <title>MIME Types Util</title>
-    <link rel="stylesheet" href="./src/styles.css" />
+    <link rel="stylesheet" href="./styles.css" />
   </head>
 
   <body>
@@ -15,20 +15,19 @@
 
       <form>
         <div>
-          <label for="mime-method">Method:</label>
-          <select id="mime-method" name="mime-method">
-            <option value="LookUp">Look Up</option>
-            <option value="ContentType">Content Type</option>
-            <option value="Extension">Extension</option>
+          <label for="method">Method:</label>
+          <select name="method">
+            <option value="lookup">lookup</option>
+            <option value="contentType">contentType</option>
+            <option value="extension">extension</option>
           </select>
         </div>
 
         <div>
-          <label for="input-string">Input:</label>
+          <label for="input">Input:</label>
           <input
-            id="input-string"
             type="text"
-            name="input-string"
+            name="input"
             style="font-family: monospace"
             value=".js"
             required
@@ -36,10 +35,9 @@
         </div>
 
         <div>
-          <label for="mime-output">Output:</label>
+          <label for="output">Output:</label>
           <input
-            id="mime-output"
-            name="mime-output"
+            name="output"
             readonly
             style="font-family: monospace"
           />
@@ -47,15 +45,15 @@
 
         <div>
           <div>
-            <button type="submit" id="mime-submit">Submit</button>
+            <button type="submit" name="submit">Submit</button>
           </div>
           <div>
-            <button id="output-copy">Copy</button>
+            <button type="button" name="copy">Copy</button>
           </div>
         </div>
       </form>
     </div>
 
-    <script src="src/index.js"></script>
+    <script src="./index.js"></script>
   </body>
 </html>

@@ -1,62 +1,89 @@
+//@ts-check
+
 import mime from "mime-types";
 
 /**
  * @typedef MimeMethod
- * @type {"LookUp" | "ContentType" | "Extension"}
+ * @type {"lookup" | "contentType" | "extension"}
  */
 
 let query = new URLSearchParams(window.location.search);
+let state = {};
 
-const form = /** @type {HTMLFormElement} */ (document.querySelector("form"));
+/** @type {HTMLFormElement} */
+const form = document.querySelector("form");
 
-const methodInputElem = /** @type {HTMLSelectElement} */ (document.querySelector(
-  "form > div > select"
-));
+/** @type {HTMLSelectElement} */
+const methodInputElem = form.querySelector("div > select[name='method']");
 
-const stringInputElem = /** @type {HTMLInputElement} */ (document.querySelector(
-  "#input-string"
-));
+/** @type {HTMLInputElement} */
+const stringInputElem = form.querySelector("div > input[name='input']");
 
-const outputElem = /** @type {HTMLInputElement} */ (document.querySelector(
-  "#mime-output"
-));
+/** @type {HTMLInputElement} */
+const outputElem = form.querySelector("div > input[name='output']");
 
-const copyButton = /** @type {HTMLInputElement} */ (document.querySelector(
-  "#output-copy"
-));
+/** @type {HTMLInputElement} */
+const copyButton = form.querySelector("div > div > button[name='copy']");
 
-function load() {
-  if (query.has("mime-method")) {
-    methodInputElem.value = query.get("mime-method");
+function getSelection()
+{
+  const methodOptions = methodInputElem.options;
+  const methodSelectedIndex = methodInputElem.selectedIndex;
+
+  return /** @type {MimeMethod} */ (methodOptions[methodSelectedIndex].value);
+}
+
+function getInput()
+{
+  return stringInputElem.value;
+}
+
+function load()
+{
+  if (query.has("method"))
+  {
+    methodInputElem.value = query.get("method");
+  }
+  else
+  {
+    methodInputElem.value = "lookup"
   }
 
-  if (query.has("input-string")) {
-    stringInputElem.value = query.get("input-string");
+  if (query.has("input"))
+  {
+    stringInputElem.value = query.get("input");
+  }
+  else
+  {
+    stringInputElem.value = ".js"
   }
   process();
 }
 
-function process() {
+function process()
+{
   console.log("processing");
-  const methodOptions = methodInputElem.options;
-  const methodSelectedIndex = methodInputElem.selectedIndex;
-  /** @type {MimeMethod} */
-  const methodInputValue = methodOptions[methodSelectedIndex].value;
-  const stringInputValue = stringInputElem.value;
+  const methodInputValue = getSelection();
+  const stringInputValue = getInput();
 
   console.log({ methodInputValue, stringInputValue });
 
-  try {
-    outputElem.value = processMIME(methodInputValue, stringInputValue);
-  } catch (error) {
-    if (error instanceof Error) {
+  try
+  {
+    outputElem.value = processMIME(methodInputValue, stringInputValue) || "Error";
+  }
+  catch (error)
+  {
+    if (error instanceof Error)
+    {
       console.error(error);
       outputElem.value = error.message;
     }
   }
 
-  query.set("mime-method", methodInputValue);
-  query.set("input-string", stringInputValue);
+  state = query.toString();
+  query.set("method", methodInputValue);
+  query.set("input", stringInputValue);
 }
 
 /**
@@ -64,17 +91,14 @@ function process() {
  * @param {MimeMethod} method
  * @param {string} input
  */
-function processMIME(method, input) {
-  switch (method) {
-    case "LookUp":
-      return mime.lookup(input);
-
-    case "ContentType":
-      return mime.contentType(input);
-
-    case "Extension":
-      return mime.extension(input);
-
+function processMIME(method, input)
+{
+  switch (method)
+  {
+    case "lookup":
+    case "contentType":
+    case "extension":
+      return mime[method](input);
     default:
       throw new Error("Bad MIME method");
   }
@@ -82,19 +106,23 @@ function processMIME(method, input) {
 
 load();
 
-form.addEventListener("submit", event => {
+form.addEventListener("submit", event =>
+{
   event.preventDefault();
 
   process();
 
-  window.history.pushState(query, null, "?" + query.toString());
+  window.history.pushState(state, null, "?" + query.toString());
 });
 
-copyButton.addEventListener("click", event => {
+copyButton.addEventListener("click", event =>
+{
+  console.log("copied")
   navigator.clipboard.writeText(outputElem.value);
 });
 
-window.addEventListener("popstate", event => {
+window.addEventListener("popstate", event =>
+{
   query = new URLSearchParams(window.location.search);
   console.log("Pop state", query.toString());
   load();
